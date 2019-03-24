@@ -18,105 +18,115 @@ const char* getfield(char* line, int num)
 
 int main()
 {
+//creates stack and necessary variables
     int max_size = 10;
     double first_num = 0, second_num = 0;
     struct stack *s;
     const char *current_num;
 
-    FILE* stream = fopen("input.txt", "r");
+//opens input/output files
+    FILE* input = fopen("input.txt", "r");
     FILE* output = fopen("output.txt", "w");
 
     s = create_stack(max_size);
     char line[1024];
 
-    while (fgets(line, 1024, stream))
+    while (fgets(line, 1024, input))
     {
         int valid_result = 1;
         char* tmp = strdup(line);
         unsigned int i = 1;
 
+//reads from file and stores current char/num in current_num
         while(getfield(tmp, i) != NULL){
             tmp = strdup(line);
             current_num = getfield(tmp,i);
 
-            /* TODO: current_num now holds the value at column i 
-             * in the row that is currently being observed.
-             * Your job is to insert code here to parse it and 
-             * determine what to do next (if it's a number then 
-             * push it onto the stack, for instance).
-             */
-		if(*current_num == '+')
+		//check - sign
+		if(*current_num == '-')
 		{
-                	printf("+ ");
-                
-                	fprintf(output, "+ ");
-
-                	/*if(!has_atleast_two_nums(s)){
-                    	printf("Invalid equation, moving to next.\n");
-                    	fprintf(stream2, " Invalid equation.\n");
-                    	valid_result = 0;
-                    	break;
-                	}*/
-                	first_num = pop(s);
-                	second_num = pop(s);
-			double sum = first_num+second_num;
-                	push(s, sum);
-        	}
-		else if(*current_num == '-')
-		{
+			//prints - sign
                 	printf("- ");
                 	fprintf(output, "- ");
                 
-                	/*if(!has_atleast_two_nums(s)){
+		//checks if there are not enough nums to perform operation
+                	if(!has_atleast_two_nums(s)){
                     		printf("Invalid equation, moving to next.\n");
-                    		fprintf(stream2, " Invalid equation.\n");
                     		valid_result = 0;
                     		break;
-                	}*/
+                	}
+			//pushes the new number after operation is performed
                 	first_num = pop(s);
                 	second_num = pop(s);
 			double sub = second_num-first_num;
                 	push(s, sub);
             	}
+		//check + sign
+		else if(*current_num == '+')
+		{
+			//prints + sign
+                	printf("+ ");
+                
+                	fprintf(output, "+ ");
+
+		//checks if there are not enough nums to perform operation
+                	if(!has_atleast_two_nums(s)){
+                    	printf("Invalid equation, moving to next.\n");
+                    	valid_result = 0;
+                    	break;
+                	}
+
+			//pushes the new number after operation is performed
+                	first_num = pop(s);
+                	second_num = pop(s);
+			double sum = first_num+second_num;
+                	push(s, sum);
+        	}
+		//check * sign
 		else if(*current_num == '*')
 		{
+			//prints * sign
                 	printf("* ");
                 	fprintf(output, "* ");
                 
-                	/*if(!has_atleast_two_nums(s)){
+		//checks if there are not enough nums to perform operation
+                	if(!has_atleast_two_nums(s)){
                     		printf("Invalid equation, moving to next.\n");
-                    		fprintf(stream2, " Invalid equation.\n");
                     		valid_result = 0;
                     		break;
-                	}*/
+                	}
                 
+			//pushes the new number after operation is performed
                 	first_num = pop(s);
                 	second_num = pop(s);
 			double mult = first_num*second_num;
                 	push(s, mult);
             	}
+		//check / sign
 		else if(*current_num == '/'){
+			//prints * sign
                 	printf("/ ");
                 	fprintf(output, "/ ");
                 
-                	/*if(!has_atleast_two_nums(s)){
+		//checks if there are not enough nums to perform operation
+                	if(!has_atleast_two_nums(s)){
                     		printf("Invalid equation, moving to next.\n");
-                    		fprintf(stream2, " Invalid equation.\n");
                     		valid_result = 0;
                     		break;
-                	}*/
+                	}
                 
+			//pushes the new number after operation is performed
                 	first_num = pop(s);
                 	second_num = pop(s);
 			double div = (double)second_num/(double)first_num;
                 	push(s, div);
             	}
+		//check number
 		else
 		{
-			//check if num
                 	double input_num = atof(current_num);
-                	printf("%.2f ", input_num);
-                	fprintf(output, "%.2f ", input_num);
+                	printf("%.3f ", input_num);
+                	fprintf(output, "%.3f ", input_num);
                 	push(s,input_num);
             	}
 
@@ -124,10 +134,10 @@ int main()
             i++;
         }
 
-	//???????????????????
+//prints the new value pushed to the stack
 	if(valid_result){
-            printf("= %.2f\n",peek(s));
-            fprintf(output, "= %.2f\n",pop(s));
+            printf("= %.3f\n",peek(s));
+            fprintf(output, "= %.3f\n",pop(s));
             clear(s);
         }
 
@@ -135,7 +145,8 @@ int main()
         free(tmp);
     }
     
-    fclose(stream); 
+//closes files and frees memory
+    fclose(input); 
     fclose(output);
 
     destroy_stack(s);

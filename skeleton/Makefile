@@ -6,7 +6,7 @@ CC=gcc
 CFLAGS= -g -Wall -Wextra -pedantic -Werror
 
 #TODO add your netid here
-NETID= 
+NETID= mendelowitz
 
 OBJS=stack.o
 
@@ -32,10 +32,10 @@ test: $(OBJS)
 	#TODO: If you have opted to write your own test, comment out
 	#      the below lines
 	#
-	#@echo "Building User Tests"
-	#$(CC) $(CFLAGS) -I./ test-stack-$(NETID).c -o test-stack-$(NETID).out $(OBJS)
-	#@echo "Running User Tests"
-	#./test-stack-$(NETID).out
+	@echo "Building User Tests"
+	$(CC) $(CFLAGS) -I./ test-stack-$(NETID).c -o test-stack-$(NETID).out $(OBJS)
+	@echo "Running User Tests"
+	./test-stack-$(NETID).out
 	
 	@echo "Done"
 

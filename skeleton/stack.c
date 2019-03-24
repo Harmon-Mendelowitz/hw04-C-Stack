@@ -106,15 +106,11 @@ int clear(struct stack *s){
 	{
 		if(s->stack_nums!=NULL)
 		{
-			for(int x=s->current_size-1; x>0; x--)
+			while(s->current_size > 0)
 			{
 				s->stack_nums[s->current_size-1] = -1;
 				s->current_size = s->current_size - 1;
 			}
-		}
-		if(s->current_size < 0)
-		{
-			s->current_size = 0;
 			return 1;
 		}
 	}
